@@ -3,3 +3,5 @@ __pycache__/
 .env
 output/
 *.png
+build/
+demo_analytics_app.egg-info/
