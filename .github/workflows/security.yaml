@@ -42,7 +42,7 @@ jobs:
       - name: Perform Bandit Analysis
         uses: PyCQA/bandit-action@v1
         with:
-          severity: 'CRITICAL'
+          severity: 'high'
 
       # Picklescan (Python-specific malicious serialization scanner)
       - name: Install & Run Picklescan
