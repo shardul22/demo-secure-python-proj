@@ -1,0 +1,67 @@
+name: Python App DevSecOps Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  sast-and-dependency-scan:
+    name: CodeQL, Semgrep & Picklescan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      # CodeQL (Advanced SAST)
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      # Semgrep (Lightweight SAST)
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/python"
+          generateSarif: "1"
+
+      # Picklescan (Python-specific malicious serialization scanner)
+      - name: Install & Run Picklescan
+        run: |
+          pip install picklescan
+          picklescan -p .
+
+  container-security-scan:
+    name: Build & Scan Docker Image (Trivy)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t demo-app:latest .
+
+      # Trivy (Container OS & Library Dependency Scanner)
+      - name: Run Trivy Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'demo-app:latest'
+          format: 'table'
+          exit-code: '1' # Fails the pipeline if CRITICAL/HIGH vulns are found
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'

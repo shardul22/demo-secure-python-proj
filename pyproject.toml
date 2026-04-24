@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "demo-analytics-app"
+version = "1.1.0"
+description = "A comprehensive Python application demonstrating containerization, CLI, and security scanning."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas==2.2.0",
+    "numpy==1.26.4",
+    "matplotlib==3.8.2",
+    "requests==2.31.0",
+    "pydantic==2.6.1",
+    "python-dotenv==1.0.1",
+    "cryptography==42.0.2",
+    "click==8.1.7"
+]
+
+[project.scripts]
+run-demo = "app:cli"
