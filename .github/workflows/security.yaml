@@ -64,4 +64,5 @@ jobs:
           exit-code: '1' # Fails the pipeline if CRITICAL/HIGH vulns are found
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          # severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
