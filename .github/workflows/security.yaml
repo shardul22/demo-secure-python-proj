@@ -38,6 +38,11 @@ jobs:
         with:
           config: "p/python"
           generateSarif: "1"
+      # Bandit
+      - name: Perform Bandit Analysis
+        uses: PyCQA/bandit-action@v1
+        with:
+          severity: 'CRITICAL'
 
       # Picklescan (Python-specific malicious serialization scanner)
       - name: Install & Run Picklescan
