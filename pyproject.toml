@@ -21,3 +21,5 @@ dependencies = [
 
 [project.scripts]
 run-demo = "app:cli"
+[tool.setuptools]
+py-modules = ["app"]

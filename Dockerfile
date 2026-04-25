@@ -1,27 +1,26 @@
 # Use an official lightweight Python image
 FROM python:3.10-slim
 
-# Prevent Python from writing .pyc files and enable unbuffered logging
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Create a non-root user for security compliance
 RUN useradd -m -r appuser
-
-# Set the working directory
 WORKDIR /app
 
-# Copy the project files
+# 1. Copy the application source code
 COPY pyproject.toml app.py README.md ./
 
-# Install the package (this fetches wheels from PyPI based on pyproject.toml)
-RUN pip install --no-cache-dir .
+# 2. COPY the generated wheels from your Mac into the Docker image
+COPY ./generated_wheels /app/wheelfiles/
 
-# Ensure output directory exists and is owned by the non-root user
-RUN mkdir output && chown appuser:appuser output
+# 3. Install the application directly from the baked-in wheels
+RUN pip install --no-cache-dir --no-index --find-links=/app/wheelfiles .
 
-# Switch to the non-root user
+# 4. Create the new explicitly named export directory and set ownership
+RUN mkdir output /app/exported_scanned_wheels && \
+    chown appuser:appuser output /app/exported_scanned_wheels /app/wheelfiles
+
 USER appuser
 
-# Define the default execution command
-CMD ["run-demo"]
+# 5. The startup command: Copy wheels to the new export volume, THEN run the app
+CMD cp -r /app/wheelfiles/* /app/exported_scanned_wheels/ && run-demo
