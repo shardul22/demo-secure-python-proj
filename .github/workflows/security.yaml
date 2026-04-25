@@ -5,6 +5,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  # To enable manual wf run option.
+  workflow_dispatch: 
 
 jobs:
   sast-and-dependency-scan:
