@@ -1,3 +1,5 @@
+[![Python App DevSecOps Pipeline](https://github.com/shardul22/demo-secure-python-proj/actions/workflows/security.yaml/badge.svg)](https://github.com/shardul22/demo-secure-python-proj/actions/workflows/security.yaml)
+
 # Demo Analytics App
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/demo-analytics-repo/security.yml?branch=main)
